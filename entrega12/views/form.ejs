@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="stylesheets/style.css" />
+    <title>Carga de Productos</title>
+  </head>
+  <body>
+    <div class="container border">
+      <form onsubmit="submitForm(event)">
+        <div>
+          <label for="title">Nombre del producto</label>
+          <input id="title" name="title" type="text" />
+        </div>
+        <div>
+          <label for="price">Precio del producto</label>
+          <input id="price" name="price" type="number" />
+        </div>
+        <div>
+          <label for="thumbnail" class="form-label"
+            >Link de la imagen del producto</label
+          >
+          <input
+            id="thumbnail"
+            class="form-control"
+            name="thumbnail"
+            type="text"
+          />
+        </div>
+        <button type="submit">Crear Producto</button>
+      </form>
+    </div>
+
+    <h1|>Productos Cargados</h1|>
+    <table>
+      <thead>
+        <th>Nombre</th>
+        <th>Precio</th>
+        <th>Foto</th>
+      </thead>
+      <tbody id="tbody"></tbody>
+    </table>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="scripts/main.js"></script>
+  </body>
+</html>

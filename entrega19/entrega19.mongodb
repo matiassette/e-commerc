@@ -1,0 +1,68 @@
+  
+/* CREO BASE DE DATOS E-COMMERCE*/
+use ecommerce
+/* CREO COLLECIONES PEDIDAS: MENSAJES Y PRODUCTOS*/
+db.createCollection("mensajes")
+db.createCollection("productos")
+/* MUESTRO LAS COLECCIONES PARA VER QUE SE HAYAN CREADO BIEN */
+show collections
+/* INSERTO LOS 10 PRODUCTOS */
+db.productos.insert([
+    {title: "calza", price:1350, thumbnail: "www.img.com"},
+    {title: "shorts", price:2000, thumbnail: "www.img.com"},
+    {title: "zapatilla", price:4900, thumbnail: "www.img.com"},
+    {title: "inflador", price:300, thumbnail: "www.img.com"},
+    {title: "medias", price:200, thumbnail: "www.img.com"},
+    {title: "pelota", price:120, thumbnail: "www.img.com"},
+    {title: "cinturon", price:900, thumbnail: "www.img.com"},
+    {title: "calzones", price:600, thumbnail: "www.img.com"},
+    {title: "campera", price:3950, thumbnail: "www.img.com"},
+    {title: "cuello", price:1200, thumbnail: "www.img.com"}
+    ])
+/* INSERTO LOS 10 MENSAJES */
+
+db.mensajes.insert([
+    {user: "juan@gmail.com", msg:"Hola", date: ISODate()},
+    {user: "pablo@gmail.com", msg:"que onda", date: ISODate()},
+    {user: "marianela@gmail.com", msg:"todo bien?", date: ISODate()},
+    {user: "brian@gmail.com", msg:"hace frio, no?", date: ISODate()},
+    {user: "sergio@gmail.com", msg:"cuantos años tenes", date: ISODate()},
+    {user: "alan@gmail.com", msg:"tengo 21 años", date: ISODate()},
+    {user: "edgar@gmail.com", msg:"trabajas en donde", date: ISODate()},
+    {user: "mariana@gmail.com", msg:"te gusta viajar", date: ISODate()},
+    {user: "nicolas@gmail.com", msg:"trabajo en GOOGLE", date: ISODate()},
+    {user: "homero@gmail.com", msg:"no tengo hotmail", date: ISODate()}
+])
+
+/* LISTO LOS PRODUCTOS */
+db.productos.find().pretty()
+/* LISTO LOS MENSAJES */
+db.mensajes.find().pretty()
+
+/* CHEQUEO CANTIDAD DE DOCUMENTOS EN CADA COLECCIÓN */
+db.productos.estimatedDocumentCount()
+db.mensajes.estimatedDocumentCount()
+
+/* AGREGO UN PRODUCTO MAS A LA COLECCION PRODUCTOS */
+db.productos.insertOne({title: "cuello", price:750, thumbnail: "www.img.com"})
+
+/* CONSULTAS */
+/* PRECIO < 1000 */
+db.productos.find({price: {$lt: 1000}})
+/* 1000 < PRECIO < 3000 */
+db.productos.find({$and: [{price: {$gt: 1000}}, {price: {$lt: 3000}}]})
+/* 3000 < PRECIO */
+db.productos.find({price: {$gt: 3000}})
+/* SOLO NOMBRE DEL TERCER PRODUCTO MAS BARATO */
+db.productos.find({},{title: 1}).sort({price: 1}).limit(1).skip(2);
+/* ACTUALIZO EL STOCK A 100*/
+db.productos.update({}, {$set: {stock: 100}}, {upsert:true, multi:true})
+/* CAMBIO STOCK A 0 DE LOS PRODUCTOS MAYORES A 4000*/
+db.productos.update({price: {$gt: 4000} }, {$set: {stock: 0}}, {upsert:true, multi:true})
+/* BORRO PRODUCTOS CON PRECIO < 1000 */
+db.productos.deleteMany({price: {$lt: 1000}})
+
+/* CREO EL USUARIO PEPE */
+db.createUser({user:"pepe", pwd:"asd456", roles: [{role: "read", db: "ecommerce"}]})
+/* PRUEBO QUE PEPE NO PUEDA CAMBIAR LA INFO */
+db.productos.insertOne({title: "gorrita"})
